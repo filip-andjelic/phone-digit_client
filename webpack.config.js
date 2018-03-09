@@ -1,11 +1,11 @@
-var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
+let webpack = require('webpack');
+let autoprefixer = require('autoprefixer');
 
 module.exports = {
   entry: [
     'webpack-dev-server/client?http://localhost:8080',
-    'webpack/hot/only-dev-server',
-    './src/index.jsx'
+    //'webpack-hot-middleware/client?http://localhost:3000/',
+    './src/script/index.jsx'
   ],
   module: {
     loaders: [{
