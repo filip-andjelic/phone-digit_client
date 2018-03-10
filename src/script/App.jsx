@@ -3,7 +3,7 @@ import {ConnectionStateContainer} from './components/ConnectionState';
 
 export default React.createClass({
     render: function() {
-        return <div>
+        return <div className="arch-container">
             <ConnectionStateContainer/>
             {this.props.children}
         </div>;

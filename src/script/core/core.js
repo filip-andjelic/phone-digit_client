@@ -1,4 +1,8 @@
 import {List, Map} from 'immutable';
+import {createStore, applyMiddleware} from 'redux';
+import remoteActionMiddleware from './remote_action_middleware';
+import io from 'socket.io-client';
+import reducer from './reducer';
 
 function setConnectionState(state, connectionState, connected) {
     return state.set('connection', Map({
@@ -12,12 +16,19 @@ function setState(state, newState) {
 }
 
 function wordChange(state, wordList) {
-    return state.set('wordList', wordList);
+    console.log(wordList);
+    return state.set('wordsList', wordList);
 }
 
-function editInput(state, input) {
+function updateHistory(state, input) {
+    return state.set('historyList', state.get('historyList').push(input));
+}
+
+function editInput(input) {
     let validationMessage = '';
     const digitCheckRegEx = /^[0-9]+$/;
+    const state = store.getState();
+    const realWords = state.get('realWords');
 
     if (input) {
         if (typeof input !== 'string') {
@@ -30,6 +41,10 @@ function editInput(state, input) {
         // @TODO throw an exception instead
         return validationMessage;
     }
+    if (socket) {
+        console.log(realWords);
+        socket.emit('INPUT_CHANGE', input, realWords);
+    }
 
     return state.set('inputValue', input);
 }
@@ -41,10 +56,21 @@ const INITIAL_STATE = new Map({
     'realWords': false
 });
 
-export default {
+const socket = io(`${location.protocol}//${location.hostname}:7171`);
+
+const createStoreWithMiddleware = applyMiddleware(
+    remoteActionMiddleware(socket)
+)(createStore);
+
+const store = createStoreWithMiddleware(reducer);
+
+export const Core = {
     setConnectionState: setConnectionState,
     setState: setState,
     editInput: editInput,
     wordChange: wordChange,
-    INITIAL_STATE: INITIAL_STATE
+    updateHistory: updateHistory,
+    INITIAL_STATE: INITIAL_STATE,
+    socket: socket,
+    store: store
 };

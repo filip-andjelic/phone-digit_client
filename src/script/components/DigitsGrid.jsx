@@ -35,7 +35,7 @@ export const DigitsGrid = React.createClass({
 
         this.getDigits().forEach(function(values, digit) {
             digitsList.push(<div className={digit + '-digit digit-button'}
-                        onClick={() => clickHandle(digit)}
+                        onClick={() => clickHandle(digit, true)}
                         key={digit}>
                 <span className='big-digit' key={digit + '_digit'}>{digit}</span>
                 <span className='small-values' key={digit + '_values'}>{values.join(', ')}</span>

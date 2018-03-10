@@ -1,23 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {Router, Route, hashHistory} from 'react-router';
-import {createStore, applyMiddleware} from 'redux';
 import {Provider} from 'react-redux';
-import io from 'socket.io-client';
-import reducer from './core/reducer';
 import Actions from './core/action_creators';
-import remoteActionMiddleware from './core/remote_action_middleware';
+import {Core} from './core/core';
 import App from './App';
 import {ConverterPageWrapper} from './pages/ConverterPage';
-require('../style.css');
+import '../style/sass/application.scss';
 
-const socket = io(`${location.protocol}//${location.hostname}:7171`);
-const createStoreWithMiddleware = applyMiddleware(
-    remoteActionMiddleware(socket)
-)(createStore);
-const store = createStoreWithMiddleware(reducer);
-const routes =
-    <Route component={App}>
+const routes = <Route component={App}>
         <Route path="/" component={ConverterPageWrapper}/>
     </Route>;
 const connectionStateList = [
@@ -30,19 +21,20 @@ const connectionStateList = [
     'reconnect_failed'
 ];
 
-socket.on('STATE_CHANGE', state =>
-    store.dispatch(Actions.setState(state))
-);
-socket.on('WORD_LIST', (wordList) => {
-    store.dispatch(Actions.wordList(store.getState(), wordList));
+Core.socket.on('WORD_LIST', (wordList) => {
+    Core.store.dispatch(Actions.wordList(Core.store.getState(), wordList));
+});
+
+Core.socket.on('HISTORY_LIST', (input) => {
+    Core.store.dispatch(Actions.historyList(Core.store.getState(), input));
 });
 
 connectionStateList.forEach(ev =>
-    socket.on(ev, () => store.dispatch(Actions.setConnectionState(ev, socket.connected)))
+    Core.socket.on(ev, () => Core.store.dispatch(Actions.setConnectionState(ev, Core.socket.connected)))
 );
 
 ReactDOM.render(
-    <Provider store={store}>
+    <Provider store={Core.store}>
         <Router history={hashHistory}>{routes}</Router>
     </Provider>,
     document.getElementById('app')

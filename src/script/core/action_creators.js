@@ -21,12 +21,15 @@ function wordList(state, wordList) {
     };
 }
 
-function editInput(state, input) {
+function editInput(input) {
     return {
         type: 'INPUT_CHANGE',
-        meta: {
-            remote: true
-        },
+        input
+    };
+}
+function historyList(state, input) {
+    return {
+        type: 'HISTORY_LIST',
         input,
         state
     };
@@ -37,4 +40,5 @@ export default {
     setState: setState,
     wordList: wordList,
     editInput: editInput,
+    historyList: historyList
 };
