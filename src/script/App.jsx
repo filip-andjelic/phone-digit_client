@@ -3,9 +3,11 @@ import {ConnectionStateContainer} from './components/ConnectionState';
 
 export default React.createClass({
     render: function() {
-        return <div className="arch-container">
+        return <div id="arch-layout-grid" className="arch-container">
             <ConnectionStateContainer/>
-            {this.props.children}
+            <div id="application-page-content" className="application-view-wrapper">
+                {this.props.children}
+            </div>
         </div>;
     }
 });

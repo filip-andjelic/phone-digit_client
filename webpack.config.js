@@ -1,10 +1,8 @@
 let webpack = require('webpack');
-let autoprefixer = require('autoprefixer');
 
 module.exports = {
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
-        //'webpack-hot-middleware/client?http://localhost:3000/',
         './src/script/index.jsx'
     ],
     module: {
@@ -14,7 +12,7 @@ module.exports = {
             loader: 'react-hot-loader!babel-loader'
         }, {
             test: /\.scss$/,
-            loader: 'style-loader!css-loader!sass-loader'
+            loader: 'style-loader!css-loader?url=false!sass-loader'
         }]
     },
     resolve: {

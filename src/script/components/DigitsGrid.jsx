@@ -21,8 +21,6 @@ function getDigits() {
         '8', ['t', 'u', 'v']
     ], [
         '9', ['w', 'x', 'y', 'z']
-    ], [
-        '0', ['0']
     ]]);
 }
 
@@ -34,7 +32,7 @@ export const DigitsGrid = React.createClass({
         let digitsList = [];
 
         this.getDigits().forEach(function(values, digit) {
-            digitsList.push(<div className={digit + '-digit digit-button'}
+            digitsList.push(<div className={'digit-'+ digit +' digit-button'}
                         onClick={() => clickHandle(digit, true)}
                         key={digit}>
                 <span className='big-digit' key={digit + '_digit'}>{digit}</span>
@@ -44,6 +42,12 @@ export const DigitsGrid = React.createClass({
         
         return <div className="digits-grid">
             {digitsList}
+            <div className={'digit-0 digit-button'}
+                 onClick={() => clickHandle('0', true)}
+                 key={'0'}>
+                <span className='big-digit' key={'0_digit'}>0</span>
+                <span className='small-values' key={'0_values'}>0</span>
+            </div>
         </div>;
     }
 });

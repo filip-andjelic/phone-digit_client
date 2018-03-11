@@ -21,10 +21,6 @@ const connectionStateList = [
     'reconnect_failed'
 ];
 
-Core.socket.on('WORD_LIST', (wordList) => {
-    Core.store.dispatch(Actions.wordList(Core.store.getState(), wordList));
-});
-
 Core.socket.on('HISTORY_LIST', (input) => {
     Core.store.dispatch(Actions.historyList(Core.store.getState(), input));
 });
@@ -37,5 +33,5 @@ ReactDOM.render(
     <Provider store={Core.store}>
         <Router history={hashHistory}>{routes}</Router>
     </Provider>,
-    document.getElementById('app')
+    document.getElementById('application-wrapper')
 );

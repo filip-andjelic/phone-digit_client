@@ -19,7 +19,9 @@ export default function(state = INITIAL_STATE, action) {
         case 'WORD_LIST':
             return Core.wordChange(action.state, action.wordList);
         case 'HISTORY_LIST':
-            return Core.updateHistory(action.state, action.wordList);
+            return Core.updateHistory();
+        case 'REAL_WORDS':
+            return Core.toggleRealWords();
         default:
             return state;
     }

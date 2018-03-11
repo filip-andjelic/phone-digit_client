@@ -2,12 +2,29 @@ import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
 import Actions from '../core/action_creators';
+import {Core} from '../core/core';
 import {DigitsGrid} from '../components/DigitsGrid';
 import {DigitsInput} from '../components/DigitsInput';
 
+function bindListerToLocalState(component) {
+    isListenerAttached = true;
+
+    Core.socket.on('WORD_LIST', (wordList) => {
+        Core.store.dispatch(Actions.wordList(Core.store.getState(), wordList));
+        component.setState({'wordList': wordList});
+    });
+
+    Core.socket.on('HISTORY_LIST_UPDATE', (history) => {
+        console.log(history);
+        //        Core.store.dispatch(Actions.wordList(Core.store.getState(), wordList));
+        //component.setState({'realWords': realWords});
+    });
+}
 function mapStateToProps(state) {
     return {
-        inputValue: state.get('inputValue')
+        inputValue: state.get('inputValue'),
+        wordList: state.get('wordList'),
+        realWords: state.get('realWords'),
     };
 }
 
@@ -17,21 +34,27 @@ function mapDispatchToProps(dispatch) {
             // @TODO implement throttle
             return dispatch(Actions.editInput(input));
         },
-        toggleRealWords: function(input) {
-            //return toggleRealWords(state, input);
+        toggleRealWords: function() {
+            return dispatch(Actions.realWords());
         },
-        toggleHistoryList: function(input) {
-            //return toggleHistoryList(state, input);
+        toggleHistoryList: function() {
+            return dispatch(Actions.historyList());
         }
     };
 }
 
+let isListenerAttached = false;
 export const ConverterPage = React.createClass({
     mixins: [PureRenderMixin],
     getInitialState() {
         return {
             inputValue: this.props.inputValue,
+            wordList: this.props.wordList,
+            realWords: this.props.realWords,
             inputChange: (input, concat) => {
+                if (!input) {
+                    this.setState({'wordList': []});
+                }
                 input = concat ? this.state.inputValue + input : input;
 
                 this.setState(() => {
@@ -41,19 +64,31 @@ export const ConverterPage = React.createClass({
                 });
 
                 return this.props.inputChange(input);
+            },
+            toggleRealWords: () => {
+                this.props.toggleRealWords();
+                this.setState('realWords', !this.state.realWords);
             }
         };
     },
     render: function() {
-        return <div className="converter-page-wrapper page-content horizontal-separation">
-            <div className="page-section">
-                <DigitsGrid clickHandle={this.state.inputChange}/>
-            </div>
-            <div className="page-section">
-                <DigitsInput value={this.state.inputValue}
-                             inputChange={this.state.inputChange}
-                             toggleHistoryList={this.props.toggleHistoryList}
-                             toggleRealWords={this.props.toggleRealWords}/>
+        if (!isListenerAttached) {
+            bindListerToLocalState(this);
+        }
+
+        return <div className="converter-page-wrapper page-wrapper">
+            <div className="page-content horizontal-separation">
+                <div className="border-less page-section">
+                    <DigitsGrid clickHandle={this.state.inputChange}/>
+                </div>
+                <div className="border-less page-section">
+                    <DigitsInput value={this.state.inputValue}
+                                 inputChange={this.state.inputChange}
+                                 realWords={this.state.realWords}
+                                 wordsList={this.state.wordList}
+                                 toggleHistoryList={this.props.toggleHistoryList}
+                                 toggleRealWords={this.state.toggleRealWords}/>
+                </div>
             </div>
         </div>;
     }

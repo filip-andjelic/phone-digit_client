@@ -1,0 +1,56 @@
+.digits-grid {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  margin: 0 auto;
+  padding: 35px 55px;
+  color: $color_yellow-whitened;
+  position: relative;
+  background-color: $color_red-whitened-rgba;
+  border: 1px solid $color_red-smooth;
+  border-radius: 8px;
+  border-top-right-radius: 0;
+
+  .digit-button {
+    flex: 0 0 calc(33% - 2 * 10px);
+    width: calc(33% - 2 * 10px);
+    box-sizing: border-box;
+    background-color: $color_gray-dark-rgba;
+    color: $color_yellow-light;
+    border-radius: 25px;
+    font-size: $_font-size-giant;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    margin: 10px;
+    flex-wrap: wrap;
+    transition: all 0.4s ease-in;
+    box-shadow: inset 0px 0px 40px -5px $color_red-dark-rgba;
+    border: 1px solid $color_red-deep;
+    cursor: pointer;
+
+    .big-digit {
+      width: 100%;
+      text-align: center;
+      padding-bottom: 10px;
+      font-weight: 900;
+    }
+    .small-values {
+      font-size: $_font-size-regular;
+      color: $color_gray-light;
+    }
+    &.digit-0 {
+      flex: 0 0 35%;
+      width: 35%;
+      margin: auto;
+      margin-top: 15px;
+    }
+    &.clicked-state {
+      background-color: $color_yellow-light;
+      border: 1px solid $color_orange-light;
+      color: $color_orange-light;
+    }
+  }
+
+}

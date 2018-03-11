@@ -16,12 +16,25 @@ function setState(state, newState) {
 }
 
 function wordChange(state, wordList) {
-    console.log(wordList);
     return state.set('wordsList', wordList);
 }
 
-function updateHistory(state, input) {
-    return state.set('historyList', state.get('historyList').push(input));
+function updateHistory() {
+    if (socket) {
+        console.log('IDEE NA SERVER');
+        return socket.emit('TOGGLE_HISTORY_LIST');
+    }
+}
+
+function toggleRealWords() {
+    const state = store.getState();
+    const realWords = !state.get('realWords');
+
+    if (socket) {
+        socket.emit('TOGGLE_REAL_WORDS', realWords);
+    }
+
+    return state.set('realWords', realWords);
 }
 
 function editInput(input) {
@@ -42,7 +55,6 @@ function editInput(input) {
         return validationMessage;
     }
     if (socket) {
-        console.log(realWords);
         socket.emit('INPUT_CHANGE', input, realWords);
     }
 
@@ -70,6 +82,7 @@ export const Core = {
     editInput: editInput,
     wordChange: wordChange,
     updateHistory: updateHistory,
+    toggleRealWords: toggleRealWords,
     INITIAL_STATE: INITIAL_STATE,
     socket: socket,
     store: store

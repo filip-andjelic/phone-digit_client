@@ -21,17 +21,23 @@ function wordList(state, wordList) {
     };
 }
 
-function editInput(input) {
+function editInput(input, callback) {
     return {
         type: 'INPUT_CHANGE',
-        input
+        input,
+        callback
     };
 }
-function historyList(state, input) {
+
+function historyList() {
     return {
-        type: 'HISTORY_LIST',
-        input,
-        state
+        type: 'HISTORY_LIST'
+    };
+}
+
+function realWords() {
+    return {
+        type: 'REAL_WORDS'
     };
 }
 
@@ -40,5 +46,6 @@ export default {
     setState: setState,
     wordList: wordList,
     editInput: editInput,
-    historyList: historyList
+    historyList: historyList,
+    realWords: realWords
 };
