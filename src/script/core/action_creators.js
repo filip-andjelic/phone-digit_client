@@ -35,6 +35,14 @@ function historyList() {
     };
 }
 
+function updateHistory(state, list) {
+    return {
+        type: 'UPDATE_HISTORY',
+        list,
+        state
+    };
+}
+
 function realWords() {
     return {
         type: 'REAL_WORDS'
@@ -47,5 +55,6 @@ export default {
     wordList: wordList,
     editInput: editInput,
     historyList: historyList,
-    realWords: realWords
+    realWords: realWords,
+    updateHistory: updateHistory
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import {connect} from 'react-redux';
+import {List} from 'immutable';
 import Actions from '../core/action_creators';
 import {Core} from '../core/core';
 import {DigitsGrid} from '../components/DigitsGrid';
@@ -14,10 +15,11 @@ function bindListerToLocalState(component) {
         component.setState({'wordList': wordList});
     });
 
-    Core.socket.on('HISTORY_LIST_UPDATE', (history) => {
-        console.log(history);
-        //        Core.store.dispatch(Actions.wordList(Core.store.getState(), wordList));
-        //component.setState({'realWords': realWords});
+    Core.socket.on('HISTORY_LIST_NEW', (history) => {
+        let list = new List(history).toSet().toList();
+
+        Core.store.dispatch(Actions.updateHistory(Core.store.getState(), list));
+        component.setState({'wordList': list});
     });
 }
 function mapStateToProps(state) {

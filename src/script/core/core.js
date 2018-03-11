@@ -1,15 +1,7 @@
 import {List, Map} from 'immutable';
-import {createStore, applyMiddleware} from 'redux';
-import remoteActionMiddleware from './remote_action_middleware';
+import {createStore} from 'redux';
 import io from 'socket.io-client';
 import reducer from './reducer';
-
-function setConnectionState(state, connectionState, connected) {
-    return state.set('connection', Map({
-        state: connectionState,
-        connected
-    }));
-}
 
 function setState(state, newState) {
     return state.merge(newState);
@@ -21,9 +13,14 @@ function wordChange(state, wordList) {
 
 function updateHistory() {
     if (socket) {
-        console.log('IDEE NA SERVER');
-        return socket.emit('TOGGLE_HISTORY_LIST');
+        socket.emit('TOGGLE_HISTORY_LIST');
     }
+
+    return store.getState();
+}
+
+function history(state, history) {
+    return state.set('historyList', new List(history));
 }
 
 function toggleRealWords() {
@@ -69,20 +66,15 @@ const INITIAL_STATE = new Map({
 });
 
 const socket = io(`${location.protocol}//${location.hostname}:7171`);
-
-const createStoreWithMiddleware = applyMiddleware(
-    remoteActionMiddleware(socket)
-)(createStore);
-
-const store = createStoreWithMiddleware(reducer);
+const store = createStore(reducer);
 
 export const Core = {
-    setConnectionState: setConnectionState,
     setState: setState,
     editInput: editInput,
     wordChange: wordChange,
     updateHistory: updateHistory,
     toggleRealWords: toggleRealWords,
+    history: history,
     INITIAL_STATE: INITIAL_STATE,
     socket: socket,
     store: store

@@ -4,7 +4,7 @@ import {
   findRenderedDOMComponentWithTag
 } from 'react-addons-test-utils';
 import {expect} from 'chai';
-import {ConnectionState} from '../../src/components/ConnectionState';
+import {ConnectionState} from '../../src/script/components/ConnectionState';
 
 describe('ConnectionState', () => {
 
