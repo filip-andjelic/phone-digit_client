@@ -53,23 +53,24 @@ export const ConverterPage = React.createClass({
             inputValue: this.props.inputValue,
             wordList: this.props.wordList,
             realWords: this.props.realWords,
+            historyList: false,
             inputChange: (input, concat) => {
                 if (!input) {
                     this.setState({'wordList': []});
                 }
                 input = concat ? this.state.inputValue + input : input;
 
-                this.setState(() => {
-                    return {
-                        inputValue: input
-                    };
-                });
+                this.setState({inputValue: input});
+                this.setState({'historyList': false});
 
                 return this.props.inputChange(input);
             },
             toggleRealWords: () => {
                 this.props.toggleRealWords();
-                this.setState('realWords', !this.state.realWords);
+            },
+            toggleHistoryList: () => {
+                this.setState({'historyList': true});
+                this.props.toggleHistoryList();
             }
         };
     },
@@ -87,8 +88,9 @@ export const ConverterPage = React.createClass({
                     <DigitsInput value={this.state.inputValue}
                                  inputChange={this.state.inputChange}
                                  realWords={this.state.realWords}
+                                 historyList={this.state.historyList}
                                  wordsList={this.state.wordList}
-                                 toggleHistoryList={this.props.toggleHistoryList}
+                                 toggleHistoryList={this.state.toggleHistoryList}
                                  toggleRealWords={this.state.toggleRealWords}/>
                 </div>
             </div>

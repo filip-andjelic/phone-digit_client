@@ -7,12 +7,17 @@ export const DigitsInput = React.createClass({
     getInitialState() {
         return {
             value: this.props.value,
-            showLabel: false
+            realWords: this.props.realWords,
+            showLabel: false,
+            toggleRealWords: () => {
+                debugger;
+                this.setState({'realWords': !this.state.realWords});
+                this.props.toggleRealWords();
+            }
         };
     },
     render: function() {
         let changeHandle = (value) => {
-            // @TODO filter chars
             this.props.inputChange(value);
         };
 
@@ -23,7 +28,7 @@ export const DigitsInput = React.createClass({
             </div>
             <div className="input-wrapper">
                 <div className="words-button border-less user-input-button"
-                     onClick={this.props.toggleRealWords}
+                     onClick={this.state.toggleRealWords}
                      onMouseOver={() => this.setState({'showLabel': true})}
                      onMouseLeave={() => this.setState({'showLabel': false})}>
                     <i className="fa fa-comment"/>
@@ -36,9 +41,11 @@ export const DigitsInput = React.createClass({
                        value={this.props.value}/>
             </div>
             <div className={this.state.showLabel ? 'words-label show-label' : 'words-label'}>
-                {this.props.realWords ? 'Only existing words' : 'Show all results'}
+                {this.state.realWords ? 'Only existing words' : 'Show all results'}
             </div>
-            <WordsList wordsList={this.props.wordsList}/>
+            <WordsList wordsList={this.props.wordsList}
+                       historyList={this.props.historyList}
+                       clickHandle={this.props.inputChange}/>
         </div>;
     }
 });

@@ -14,4 +14,15 @@
       border-top: 1px solid $color_yellow-light;
     }
   }
+  .history-item {
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+    color: $color_yellow-light;
+    font-weight: 900;
+
+    &:not(:first-child) {
+      border-top: 1px solid $color_red-dark;
+    }
+  }
 }
