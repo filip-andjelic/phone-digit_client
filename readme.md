@@ -16,6 +16,7 @@ Techs, libs and methodologies used in this app:
       - NodeJs
       - Yarn
       - Webpack
+      - Babel
       - Socket.IO
       - Mocha
       - FontAwesome
