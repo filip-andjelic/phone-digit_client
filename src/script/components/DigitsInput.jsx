@@ -10,7 +10,6 @@ export const DigitsInput = React.createClass({
             realWords: this.props.realWords,
             showLabel: false,
             toggleRealWords: () => {
-                debugger;
                 this.setState({'realWords': !this.state.realWords});
                 this.props.toggleRealWords();
             }

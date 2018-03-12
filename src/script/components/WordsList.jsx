@@ -5,6 +5,8 @@ export const WordsList = React.createClass({
     mixins: [PureRenderMixin],
     render: function() {
         let clickHandle = (string) => {
+            // Enable history list items to be clicked
+            // In order to apply its' values to the input
             if (this.props.clickHandle && isHistory) {
                 this.props.clickHandle(string);
             }

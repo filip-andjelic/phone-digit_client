@@ -10,18 +10,27 @@ import {DigitsInput} from '../components/DigitsInput';
 function bindListerToLocalState(component) {
     isListenerAttached = true;
 
+    // When words' list is updated
     Core.socket.on('WORD_LIST', (wordList) => {
         Core.store.dispatch(Actions.wordList(Core.store.getState(), wordList));
         component.setState({'wordList': wordList});
     });
 
+    // When history list is updated
+    // Words' list component takes history list items to display
     Core.socket.on('HISTORY_LIST_NEW', (history) => {
         let list = new List(history).toSet().toList();
 
         Core.store.dispatch(Actions.updateHistory(Core.store.getState(), list));
         component.setState({'wordList': list});
     });
+
+    // When user connects to server, take last input value and apply it
+    Core.socket.on('INPUT_UPDATE', (inputValue) => {
+        component.state.inputChange(inputValue);
+    });
 }
+
 function mapStateToProps(state) {
     return {
         inputValue: state.get('inputValue'),
@@ -33,7 +42,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         inputChange: function(input) {
-            // @TODO implement throttle
+            // @TODO implement throttle on inserting a digit
+            // to ensure server call only after user finished
+            // inserting desired digit(s), for egx. on 3 seconds
             return dispatch(Actions.editInput(input));
         },
         toggleRealWords: function() {
@@ -46,6 +57,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 let isListenerAttached = false;
+
 export const ConverterPage = React.createClass({
     mixins: [PureRenderMixin],
     getInitialState() {
